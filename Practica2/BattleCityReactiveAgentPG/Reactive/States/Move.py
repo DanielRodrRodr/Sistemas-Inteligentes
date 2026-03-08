@@ -1,17 +1,18 @@
 from StateMachine.State import State
 from States.AgentConsts import AgentConsts
+import random
 
 class Move(State):
     def __init__(self, id):
         super().__init__(id)
 
-    def esta_bloqueado(self, direccion, perception):
-        obstaculos = [AgentConsts.UNBREAKABLE, AgentConsts.BRICK, AgentConsts.SEMI_UNBREKABLE, AgentConsts.SEMI_BREKABLE]
-        if direccion == AgentConsts.MOVE_UP: return perception[AgentConsts.NEIGHBORHOOD_UP] in obstaculos
-        if direccion == AgentConsts.MOVE_DOWN: return perception[AgentConsts.NEIGHBORHOOD_DOWN] in obstaculos
-        if direccion == AgentConsts.MOVE_RIGHT: return perception[AgentConsts.NEIGHBORHOOD_RIGHT] in obstaculos
-        if direccion == AgentConsts.MOVE_LEFT: return perception[AgentConsts.NEIGHBORHOOD_LEFT] in obstaculos
-        return False
+    # Ahora comprobamos qué hay exactamente en esa casilla
+    def obtener_casilla(self, direccion, perception):
+        if direccion == AgentConsts.MOVE_UP: return perception[AgentConsts.NEIGHBORHOOD_UP]
+        if direccion == AgentConsts.MOVE_DOWN: return perception[AgentConsts.NEIGHBORHOOD_DOWN]
+        if direccion == AgentConsts.MOVE_RIGHT: return perception[AgentConsts.NEIGHBORHOOD_RIGHT]
+        if direccion == AgentConsts.MOVE_LEFT: return perception[AgentConsts.NEIGHBORHOOD_LEFT]
+        return AgentConsts.UNBREAKABLE # Por si acaso devuelve muro duro
 
     def Update(self, perception, map, agent):
         agent_x, agent_y = perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y]
@@ -31,16 +32,35 @@ class Move(State):
             dir_prim = AgentConsts.MOVE_UP if diff_y > 0 else AgentConsts.MOVE_DOWN
             dir_sec = AgentConsts.MOVE_RIGHT if diff_x > 0 else AgentConsts.MOVE_LEFT
 
-        if not self.esta_bloqueado(dir_prim, perception): return dir_prim, False
-        if not self.esta_bloqueado(dir_sec, perception): return dir_sec, False
+        obstaculos_destruibles = [AgentConsts.BRICK, AgentConsts.SEMI_BREKABLE, AgentConsts.SEMI_UNBREKABLE]
+        obstaculos_duros = [AgentConsts.UNBREAKABLE, AgentConsts.OTHER] # Muros de acero o agua
+
+        casilla_prim = self.obtener_casilla(dir_prim, perception)
         
-        for escape in [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]:
-            if not self.esta_bloqueado(escape, perception): return escape, False
-            
+        if casilla_prim in obstaculos_destruibles:
+            return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)
+        elif casilla_prim not in obstaculos_duros:
+            return dir_prim, False
+
+        casilla_sec = self.obtener_casilla(dir_sec, perception)
+        
+        if casilla_sec in obstaculos_destruibles:
+            return dir_sec, (perception[AgentConsts.CAN_FIRE] > 0)
+        elif casilla_sec not in obstaculos_duros:
+            return dir_sec, False
+        
+        movimientos = [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
+        random.shuffle(movimientos) # Un poco de azar para que no se quede rebotando siempre igual
+        
+        for escape in movimientos:
+            casilla_escape = self.obtener_casilla(escape, perception)
+            if casilla_escape not in obstaculos_duros:
+                disparar = casilla_escape in obstaculos_destruibles and (perception[AgentConsts.CAN_FIRE] > 0)
+                return escape, disparar
+
         return AgentConsts.NO_MOVE, False
 
     def Transit(self, perception, map):
-        # Mismas interrupciones que SeekTarget para no tener que salir de este estado si no es necesario
         vision = [perception[AgentConsts.NEIGHBORHOOD_UP], perception[AgentConsts.NEIGHBORHOOD_DOWN],
                   perception[AgentConsts.NEIGHBORHOOD_LEFT], perception[AgentConsts.NEIGHBORHOOD_RIGHT]]
         
