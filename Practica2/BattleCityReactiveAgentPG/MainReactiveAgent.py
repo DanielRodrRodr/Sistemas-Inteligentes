@@ -7,7 +7,5 @@ from Agent.BaseAgent import BaseAgent
 from Reactive.ReactiveAgent import ReactiveAgent
 
 
-agent = ReactiveAgent("1","Isma")
+agent = ReactiveAgent("1","MyAgent")
 agentLoop(agent,True)
-
- 

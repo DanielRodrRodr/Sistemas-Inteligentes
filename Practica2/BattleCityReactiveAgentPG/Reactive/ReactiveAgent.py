@@ -5,19 +5,17 @@ from States.AttackPlayer import AttackPlayer
 from States.AttackBase import AttackBase
 from States.SeekTarget import SeekTarget
 from States.DodgeBullet import DodgeBullet
-from States.GoToExit import GoToExit
+from Reactive.States.Move import GoToExit
 
 
 class ReactiveAgent(BaseAgent):
     def __init__(self, id, name):
         super().__init__(id, name)
         dictionary = {
-        "GoToCommandCenter" : GoToCommandCenter("GoToCommandCenter"),
-        "AttackPlayer" : AttackPlayer("AttackPlayer"),
-        "AttackBase" : AttackBase("AttackBase"),
-        "SeekTarget" : SeekTarget("SeekTarget"),
-        "DodgeBullet" : DodgeBullet("DodgeBullet"),
-        "GoToExit" : GoToExit("GoToExit")
+            "SeekTarget": SeekTarget("SeekTarget"),
+            "Move": Move("Move"),
+            "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
+            "DodgeBullet": DodgeBullet("DodgeBullet")
         }
         self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"SeekTarget")
         #self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"GoToCommandCenter")

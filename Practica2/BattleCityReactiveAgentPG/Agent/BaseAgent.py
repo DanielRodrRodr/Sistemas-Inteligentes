@@ -15,7 +15,7 @@ class BaseAgent:
     def Start(self):
         print("Inicio del agente ")
 
-    #Metodo que se llama en cada actualización del agente, y se proporciona le vector de percepciones
+    #Metodo que se llama en cada actualización del agente, y se proporciona el vector de percepciones
     #Devuelve la acción u el disparo si o no
     def Update(self, perception,map):
         print("Toma de decisiones del agente")
