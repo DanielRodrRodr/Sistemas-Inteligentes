@@ -6,16 +6,56 @@ class DodgeBullet(State):
         super().__init__(id)
 
     def Update(self, perception, map, agent):
-        if perception[AgentConsts.NEIGHBORHOOD_UP] == AgentConsts.SHELL or perception[AgentConsts.NEIGHBORHOOD_DOWN] == AgentConsts.SHELL:
-            if perception[AgentConsts.NEIGHBORHOOD_RIGHT] != AgentConsts.UNBREAKABLE: 
+
+        can_fire = perception[AgentConsts.CAN_FIRE] > 0
+
+        up = perception[AgentConsts.NEIGHBORHOOD_UP]
+        down = perception[AgentConsts.NEIGHBORHOOD_DOWN]
+        left = perception[AgentConsts.NEIGHBORHOOD_LEFT]
+        right = perception[AgentConsts.NEIGHBORHOOD_RIGHT]
+
+        dist_up = perception[AgentConsts.NEIGHBORHOOD_DIST_UP]
+        dist_down = perception[AgentConsts.NEIGHBORHOOD_DIST_DOWN]
+        dist_left = perception[AgentConsts.NEIGHBORHOOD_DIST_LEFT]
+        dist_right = perception[AgentConsts.NEIGHBORHOOD_DIST_RIGHT]
+
+        # Detectar la bala antes de que llegue al agente y disparar
+        danger_dist = 3
+        if up == AgentConsts.SHELL and dist_up <= danger_dist:
+            if can_fire:
+                return AgentConsts.MOVE_UP, True
+            return AgentConsts.MOVE_RIGHT, False
+
+        if down == AgentConsts.SHELL and dist_down <= danger_dist:
+            if can_fire:
+                return AgentConsts.MOVE_DOWN, True
+            return AgentConsts.MOVE_RIGHT, False
+
+        if left == AgentConsts.SHELL and dist_left <= danger_dist:
+            if can_fire:
+                return AgentConsts.MOVE_LEFT, True
+            return AgentConsts.MOVE_UP, False
+
+        if right == AgentConsts.SHELL and dist_right <= danger_dist:
+            if can_fire:
+                return AgentConsts.MOVE_RIGHT, True
+            return AgentConsts.MOVE_UP, False
+
+
+        # Bala vertical -> esquivar lateralmente
+        if up == AgentConsts.SHELL or down == AgentConsts.SHELL:
+            if right != AgentConsts.UNBREAKABLE:
                 return AgentConsts.MOVE_RIGHT, False
-            return AgentConsts.MOVE_LEFT, False
-        
-        if perception[AgentConsts.NEIGHBORHOOD_RIGHT] == AgentConsts.SHELL or perception[AgentConsts.NEIGHBORHOOD_LEFT] == AgentConsts.SHELL:
-            if perception[AgentConsts.NEIGHBORHOOD_UP] != AgentConsts.UNBREAKABLE: 
+            if left != AgentConsts.UNBREAKABLE:
+                return AgentConsts.MOVE_LEFT, False
+
+        # Bala horizontal -> esquivar verticalmente
+        if right == AgentConsts.SHELL or left == AgentConsts.SHELL:
+            if up != AgentConsts.UNBREAKABLE:
                 return AgentConsts.MOVE_UP, False
-            return AgentConsts.MOVE_DOWN, False
-            
+            if down != AgentConsts.UNBREAKABLE:
+                return AgentConsts.MOVE_DOWN, False
+
         return AgentConsts.NO_MOVE, False
 
     def Transit(self, perception, map):
@@ -24,4 +64,5 @@ class DodgeBullet(State):
 
         if AgentConsts.SHELL in vision:
             return "DodgeBullet"
+        
         return "SeekTarget"
