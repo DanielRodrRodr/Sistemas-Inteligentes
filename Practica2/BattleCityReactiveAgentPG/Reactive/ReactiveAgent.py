@@ -12,7 +12,7 @@ class ReactiveAgent(BaseAgent):
         super().__init__(id, name)
         dictionary = {
             "SeekTarget": SeekTarget("SeekTarget"),
-            "Move": Move("Move"),
+            "GoToCommandCenter": Move("GoToCommandCenter"),
             "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
             "DodgeBullet": DodgeBullet("DodgeBullet"),
             "GoToExit": GoToExit("GoToExit")
