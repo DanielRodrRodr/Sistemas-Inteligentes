@@ -17,7 +17,9 @@ class AgentConsts:
     HEALTH = 15
     LIFE_X = 16
     LIFE_Y = 17
-    TIME = 18
+    EXIT_X = 18
+    EXIT_Y = 19
+    TIME = 20
 
     #movimientos
     NO_MOVE = 0
@@ -37,3 +39,4 @@ class AgentConsts:
     LIFE = 7
     SEMI_BREKABLE = 8
     SEMI_UNBREKABLE = 9
+    EXIT = 10

@@ -30,7 +30,7 @@ class GoToCommandCenter(State):
         else:
             dir_prim = AgentConsts.MOVE_UP if diff_y > 0 else AgentConsts.MOVE_DOWN
             dir_sec = AgentConsts.MOVE_RIGHT if diff_x > 0 else AgentConsts.MOVE_LEFT
-
+        
         obstaculos_destruibles = [AgentConsts.BRICK, AgentConsts.SEMI_BREKABLE]
         obstaculos_duros = [AgentConsts.UNBREAKABLE, AgentConsts.OTHER]
 
@@ -62,6 +62,7 @@ class GoToCommandCenter(State):
         return AgentConsts.NO_MOVE, False
     
     def Transit(self, perception, map):
+
         vision = [perception[AgentConsts.NEIGHBORHOOD_UP], perception[AgentConsts.NEIGHBORHOOD_DOWN],
                   perception[AgentConsts.NEIGHBORHOOD_LEFT], perception[AgentConsts.NEIGHBORHOOD_RIGHT]]
         danger_dist = 3
@@ -75,5 +76,8 @@ class GoToCommandCenter(State):
             return "DodgeBullet"
         
         if AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
+
+        if perception[AgentConsts.COMMAND_CENTER_X] < 1 or perception[AgentConsts.PLAYER_X] < 1:
+            return "GoToExit"
         
         return "GoToCommandCenter"
