@@ -1,8 +1,7 @@
 from Agent.BaseAgent import BaseAgent
 from StateMachine.StateMachine import StateMachine
-from States.SeekTarget import SeekTarget
 from States.DodgeBullet import DodgeBullet
-from States.Move import Move
+from States.GoToCommandCenter import GoToCommandCenter
 from States.OrientateAndShoot import OrientateAndShoot
 from States.GoToExit import GoToExit
 
@@ -11,14 +10,12 @@ class ReactiveAgent(BaseAgent):
     def __init__(self, id, name):
         super().__init__(id, name)
         dictionary = {
-            "SeekTarget": SeekTarget("SeekTarget"),
-            "GoToCommandCenter": Move("GoToCommandCenter"),
+            "GoToCommandCenter": GoToCommandCenter("GoToCommandCenter"),
             "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
             "DodgeBullet": DodgeBullet("DodgeBullet"),
             "GoToExit": GoToExit("GoToExit")
         }
-        self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"SeekTarget")
-        #self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"GoToCommandCenter")
+        self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"GoToCommandCenter")
 
     #Metodo que se llama al iniciar el agente. No devuelve nada y sirve para contruir el agente
     def Start(self):

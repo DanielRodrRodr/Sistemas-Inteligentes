@@ -31,17 +31,21 @@ class GoToCommandCenter(State):
             dir_prim = AgentConsts.MOVE_UP if diff_y > 0 else AgentConsts.MOVE_DOWN
             dir_sec = AgentConsts.MOVE_RIGHT if diff_x > 0 else AgentConsts.MOVE_LEFT
 
-        obstaculos_destruibles = [AgentConsts.BRICK, AgentConsts.SEMI_BREKABLE, AgentConsts.SEMI_UNBREKABLE]
+        obstaculos_destruibles = [AgentConsts.BRICK, AgentConsts.SEMI_BREKABLE]
         obstaculos_duros = [AgentConsts.UNBREAKABLE, AgentConsts.OTHER]
 
-        for direccion in [dir_prim, dir_sec]:
-            casilla = self.obtener_casilla(direccion, perception)
-            
-            if casilla in obstaculos_destruibles:
-                if can_fire:
-                    return direccion, True
-            elif casilla not in obstaculos_duros:
-                return direccion, False
+        casilla_prim = self.obtener_casilla(dir_prim, perception)
+        casilla_sec = self.obtener_casilla(dir_sec, perception)
+
+        if casilla_prim in obstaculos_destruibles:
+            return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)
+        elif casilla_prim not in obstaculos_duros:
+            return dir_prim, False
+        
+        if casilla_sec in obstaculos_destruibles:
+            return dir_sec, (perception[AgentConsts.CAN_FIRE] > 0)
+        elif casilla_sec not in obstaculos_duros:
+            return dir_sec, False
 
         movimientos = [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
         random.shuffle(movimientos) 
@@ -51,11 +55,25 @@ class GoToCommandCenter(State):
             
             if casilla_escape in obstaculos_destruibles:
                 if can_fire:
-                    return escape, True
+                    return AgentConsts.NO_MOVE, True
             elif casilla_escape not in obstaculos_duros:
                 return escape, False
 
         return AgentConsts.NO_MOVE, False
     
     def Transit(self, perception, map):
-        return "SeekTarget"
+        vision = [perception[AgentConsts.NEIGHBORHOOD_UP], perception[AgentConsts.NEIGHBORHOOD_DOWN],
+                  perception[AgentConsts.NEIGHBORHOOD_LEFT], perception[AgentConsts.NEIGHBORHOOD_RIGHT]]
+        danger_dist = 3
+        if perception[AgentConsts.NEIGHBORHOOD_UP] == AgentConsts.SHELL and perception[AgentConsts.NEIGHBORHOOD_DIST_UP] <= danger_dist:
+            return "DodgeBullet"
+        if perception[AgentConsts.NEIGHBORHOOD_DOWN] == AgentConsts.SHELL and perception[AgentConsts.NEIGHBORHOOD_DIST_DOWN] <= danger_dist:
+            return "DodgeBullet"
+        if perception[AgentConsts.NEIGHBORHOOD_LEFT] == AgentConsts.SHELL and perception[AgentConsts.NEIGHBORHOOD_DIST_LEFT] <= danger_dist:
+            return "DodgeBullet"
+        if perception[AgentConsts.NEIGHBORHOOD_RIGHT] == AgentConsts.SHELL and perception[AgentConsts.NEIGHBORHOOD_DIST_RIGHT] <= danger_dist:
+            return "DodgeBullet"
+        
+        if AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
+        
+        return "GoToCommandCenter"

@@ -50,6 +50,9 @@ class DodgeBullet(State):
         return AgentConsts.NO_MOVE, False
 
     def Transit(self, perception, map):
+        vision = [perception[AgentConsts.NEIGHBORHOOD_UP], perception[AgentConsts.NEIGHBORHOOD_DOWN],
+                  perception[AgentConsts.NEIGHBORHOOD_LEFT], perception[AgentConsts.NEIGHBORHOOD_RIGHT]]
+        
         danger_dist = 3
         hay_peligro = False
 
@@ -65,7 +68,8 @@ class DodgeBullet(State):
         if hay_peligro:
             if perception[AgentConsts.CAN_FIRE] > 0:
                 return "OrientateAndShoot"
-            
             return "DodgeBullet"
+        if AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
+        
 
-        return "Move"
+        return "GoToCommandCenter"
