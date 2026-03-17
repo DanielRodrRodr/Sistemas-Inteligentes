@@ -14,6 +14,17 @@ class GoToExit(State):
         if direccion == AgentConsts.MOVE_RIGHT: return perception[AgentConsts.NEIGHBORHOOD_RIGHT]
         if direccion == AgentConsts.MOVE_LEFT: return perception[AgentConsts.NEIGHBORHOOD_LEFT]
         return AgentConsts.UNBREAKABLE 
+    
+    def obtener_distancia(self, direccion, perception):
+        if direccion == AgentConsts.MOVE_UP: return perception[AgentConsts.NEIGHBORHOOD_DIST_UP]
+        if direccion == AgentConsts.MOVE_DOWN: return perception[AgentConsts.NEIGHBORHOOD_DIST_DOWN]
+        if direccion == AgentConsts.MOVE_RIGHT: return perception[AgentConsts.NEIGHBORHOOD_DIST_RIGHT]
+        if direccion == AgentConsts.MOVE_LEFT: return perception[AgentConsts.NEIGHBORHOOD_DIST_LEFT]
+        return 100 
+    
+    def lined(self, direccion, perception, x, y):
+        if direccion == AgentConsts.MOVE_UP or AgentConsts.MOVE_DOWN: return x
+        return y
 
     def Update(self, perception, map, agent):
 
@@ -38,12 +49,18 @@ class GoToExit(State):
         casilla_prim = self.obtener_casilla(dir_prim, perception)
         casilla_sec = self.obtener_casilla(dir_sec, perception)
 
-        if casilla_prim in obstaculos_destruibles:
+        dist_prim = self.obtener_distancia(dir_prim, perception)
+        dist_sec = self.obtener_distancia(dir_sec, perception)
+
+        if casilla_prim == AgentConsts.NOTHING or dist_prim > 1 and lined(dir_prim, perception, diff_x, diff_y) > 1:
+            return dir_prim, 0
+        elif casilla_sec == AgentConsts.NOTHING or dist_sec > 1 and lined(dir_prim, perception, diff_x, diff_y) > 1:
+            return dir_sec, 0
+        elif casilla_prim in obstaculos_destruibles and dist_prim < 1:
             return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)
         elif casilla_prim not in obstaculos_duros:
             return dir_prim, False
-        
-        if casilla_sec in obstaculos_destruibles:
+        elif casilla_sec in obstaculos_destruibles and dist_sec < 1:
             return dir_sec, (perception[AgentConsts.CAN_FIRE] > 0)
         elif casilla_sec not in obstaculos_duros:
             return dir_sec, False
