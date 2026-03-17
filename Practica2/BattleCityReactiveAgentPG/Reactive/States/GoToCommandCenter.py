@@ -25,7 +25,6 @@ class GoToCommandCenter(State):
     def Update(self, perception, map, agent):
         can_fire = perception[AgentConsts.CAN_FIRE] > 0
         agent_x, agent_y = perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y]
-        
         target_x, target_y = perception[AgentConsts.COMMAND_CENTER_X], perception[AgentConsts.COMMAND_CENTER_Y]
         
         diff_x = target_x - agent_x
@@ -44,11 +43,12 @@ class GoToCommandCenter(State):
         casilla_prim = self.obtener_casilla(dir_prim, perception)
         casilla_sec = self.obtener_casilla(dir_sec, perception)
 
-        
+        vert = [AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
+        horz = [AgentConsts.MOVE_DOWN, AgentConsts.MOVE_UP]
 
-        if casilla_prim == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1 and prim_up:
+        if casilla_prim == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1 and (diff_x > 2 and diff_y > 2):
             return dir_prim, 0
-        elif casilla_sec == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1 and in_line(dir_prim, perception, diff_x, diff_y) > 1:
+        elif casilla_sec == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1 and (diff_x > 2 and diff_y > 2):
             return dir_sec, 0
         elif casilla_prim in obstaculos_destruibles and self.obtener_distancia(dir_prim, perception) < 1:
             return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)

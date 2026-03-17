@@ -29,10 +29,19 @@ class GoToExit(State):
     def Update(self, perception, map, agent):
 
         can_fire = perception[AgentConsts.CAN_FIRE] > 0
-        agent_x, agent_y = perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y]
-        
+        agent_x, agent_y = perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y]  
         target_x, target_y = perception[AgentConsts.EXIT_X], perception[AgentConsts.EXIT_Y]
         
+        if agent_x > target_x:
+            target_x += -2
+        else:
+            target_x += 2
+
+        if agent_y > target_y:
+            target_y += -2
+        else:
+            target_y += 2
+
         diff_x = target_x - agent_x
         diff_y = target_y - agent_y
 
@@ -51,10 +60,10 @@ class GoToExit(State):
 
         dist_prim = self.obtener_distancia(dir_prim, perception)
         dist_sec = self.obtener_distancia(dir_sec, perception)
-
-        if casilla_prim == AgentConsts.NOTHING or dist_prim > 1 and lined(dir_prim, perception, diff_x, diff_y) > 1:
+        
+        if casilla_prim == AgentConsts.NOTHING or casilla_prim == AgentConsts.EXIT or self.obtener_distancia(dir_prim, perception) > 1 and (diff_x > 2 and diff_y > 2):
             return dir_prim, 0
-        elif casilla_sec == AgentConsts.NOTHING or dist_sec > 1 and lined(dir_prim, perception, diff_x, diff_y) > 1:
+        elif casilla_sec == AgentConsts.NOTHING or casilla_prim == AgentConsts.EXIT or self.obtener_distancia(dir_sec, perception) > 1 and (diff_x > 2 and diff_y > 2):
             return dir_sec, 0
         elif casilla_prim in obstaculos_destruibles and dist_prim < 1:
             return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)
