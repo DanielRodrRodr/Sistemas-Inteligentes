@@ -1,6 +1,4 @@
--snapshot 0,4
-
-Falla algunas veces al disparar a muros que dispara y después se gira.
+Usamos el snapshot por defecto
 
 Cuando tiene un muro irrompible de cara y la meta está detrás, tarda un rato
 en decidir disparar a los muros de alrededor, pero cuando lo hace termina bien.
