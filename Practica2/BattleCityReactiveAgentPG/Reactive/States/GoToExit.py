@@ -59,9 +59,6 @@ class GoToExit(State):
                     
             elif casilla not in obstaculos_duros and (diff_x > 1 and diff_y > 1):
                 return direccion, False
-
-        movimientos = [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
-        random.shuffle(movimientos) 
        
         return AgentConsts.NO_MOVE, False
 

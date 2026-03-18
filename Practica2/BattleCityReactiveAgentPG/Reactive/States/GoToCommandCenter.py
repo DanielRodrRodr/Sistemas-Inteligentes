@@ -63,18 +63,6 @@ class GoToCommandCenter(State):
             elif casilla not in obstaculos_duros:
                 return direccion, False
 
-        movimientos = [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
-        random.shuffle(movimientos) 
-        
-        for escape in movimientos:
-            casilla_escape = self.obtener_casilla(escape, perception)
-            
-            if casilla_escape in obstaculos_destruibles:
-                if can_fire:
-                    return escape, True
-            elif casilla_escape not in obstaculos_duros:
-                return escape, False
-
         return AgentConsts.NO_MOVE, False
     
     def Transit(self, perception, map):
