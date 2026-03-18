@@ -24,19 +24,10 @@ class GoToExit(State):
     def Update(self, perception, map, agent):
         can_fire = perception[AgentConsts.CAN_FIRE] > 0
         agent_x, agent_y = perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y]  
-        target_x, target_y = perception[AgentConsts.EXIT_X] + 0.5, perception[AgentConsts.EXIT_Y] +0.5
+        target_x, target_y = perception[AgentConsts.EXIT_X], perception[AgentConsts.EXIT_Y]
 
         diff_x = target_x - agent_x
         diff_y = target_y - agent_y
-        diff_x = target_x - agent_x
-        diff_y = target_y - agent_y
-
-        tolerancia = 1
-        
-        if abs(diff_x) < tolerancia:
-            diff_x = 0
-        if abs(diff_y) < tolerancia:
-            diff_y = 0
 
         if abs(diff_x) > abs(diff_y):
             dir_prim = AgentConsts.MOVE_RIGHT if diff_x > 0 else AgentConsts.MOVE_LEFT
@@ -48,7 +39,7 @@ class GoToExit(State):
         obstaculos_destruibles = [AgentConsts.BRICK]
         obstaculos_duros = [AgentConsts.UNBREAKABLE]
 
-        if (self.obtener_casilla(dir_prim, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1) and (diff_x > 1 and diff_y > 1):
+        if (self.obtener_casilla(dir_prim, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1):
             return dir_prim, False
         if (self.obtener_casilla(dir_sec, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1) and (diff_x > 1 and diff_y > 1):
             return dir_sec, False
@@ -58,9 +49,6 @@ class GoToExit(State):
             dist = self.obtener_distancia(direccion, perception)
             
             if casilla == AgentConsts.EXIT:
-                return direccion, False
-            
-            if casilla == AgentConsts.NOTHING or dist > 1 and (diff_x > 1 and diff_y > 1):
                 return direccion, False
                 
             if casilla in obstaculos_destruibles and dist < 0.2:

@@ -12,7 +12,6 @@ class OrientateAndShoot(State):
         down = perception[AgentConsts.NEIGHBORHOOD_DOWN]
         left = perception[AgentConsts.NEIGHBORHOOD_LEFT]
         right = perception[AgentConsts.NEIGHBORHOOD_RIGHT]
-        vision = [up, down, left, right]
 
         if can_fire:
             if up == AgentConsts.SHELL:
@@ -49,4 +48,7 @@ class OrientateAndShoot(State):
         if AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision and perception[AgentConsts.CAN_FIRE] > 0:
             return "OrientateAndShoot"
         
+        if perception[AgentConsts.COMMAND_CENTER_X] < 1 or perception[AgentConsts.PLAYER_X] < 1:
+            return "GoToExit"
+
         return "GoToCommandCenter"
