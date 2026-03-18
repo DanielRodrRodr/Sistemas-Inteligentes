@@ -22,6 +22,7 @@ class ReactiveAgent(BaseAgent):
         self.last_x = None
         self.last_y = None
         self.ciclos_atascado = 0
+        self.last_action = None
 
     #Metodo que se llama al iniciar el agente. No devuelve nada y sirve para contruir el agente
     def Start(self):
@@ -32,6 +33,12 @@ class ReactiveAgent(BaseAgent):
     #Devuelve la acción u el disparo si o no
     def Update(self, perception, map):
         action, shot = self.stateMachine.Update(perception, map, self)
+        if action == AgentConsts.NO_MOVE:
+            if self.last_action is not None:
+                action = self.last_action
+        else:
+            self.last_action = action
+        #action, shot = self.stateMachine.Update(perception, map, self)
 
         x = perception[AgentConsts.AGENT_X]
         y = perception[AgentConsts.AGENT_Y]

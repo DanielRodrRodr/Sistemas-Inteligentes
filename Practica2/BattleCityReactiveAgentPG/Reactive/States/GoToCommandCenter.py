@@ -40,21 +40,35 @@ class GoToCommandCenter(State):
         obstaculos_destruibles = [AgentConsts.BRICK]
         obstaculos_duros = [AgentConsts.UNBREAKABLE]
 
-        if self.obtener_casilla(dir_prim, perception) == AgentConsts.COMMAND_CENTER or diff_x < 1 and diff_y < 1:
+        if self.obtener_casilla(dir_prim, perception) == AgentConsts.COMMAND_CENTER or (diff_x < 1 and diff_y < 1):
             return dir_prim, True
         if self.obtener_casilla(dir_sec, perception) == AgentConsts.COMMAND_CENTER:
             return dir_sec, True
         
-        if self.obtener_casilla(dir_prim, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1 and (diff_x > 1 and diff_y > 1):
+        casilla_prim = self.obtener_casilla(dir_prim, perception)
+        dist_prim = self.obtener_distancia(dir_prim, perception)
+
+        if casilla_prim == AgentConsts.NOTHING:
             return dir_prim, False
-        if self.obtener_casilla(dir_sec, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1 and (diff_x > 1 and diff_y > 1):
+
+        if dist_prim > 1:
+            return dir_prim, False
+        
+        casilla_sec = self.obtener_casilla(dir_sec, perception)
+        dist_sec = self.obtener_distancia(dir_sec, perception)
+
+        if casilla_sec == AgentConsts.NOTHING:
             return dir_sec, False
         
+        if dist_sec > 1:
+            return dir_sec, False
+        
+
         for direccion in [dir_prim, dir_sec]:
             casilla = self.obtener_casilla(direccion, perception)
             dist = self.obtener_distancia(direccion, perception)
 
-            if casilla in obstaculos_destruibles and dist < 0.2:
+            if casilla in obstaculos_destruibles: #and dist < 0.2:
                 if can_fire:
                     return direccion, True
                 else:
@@ -79,7 +93,7 @@ class GoToCommandCenter(State):
         if perception[AgentConsts.NEIGHBORHOOD_RIGHT] == AgentConsts.SHELL and perception[AgentConsts.NEIGHBORHOOD_DIST_RIGHT] <= danger_dist:
             return "DodgeBullet"
         
-        if AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
+        if (AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision) and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
 
         if perception[AgentConsts.COMMAND_CENTER_X] < 1 or perception[AgentConsts.PLAYER_X] < 1:
             return "GoToExit"
