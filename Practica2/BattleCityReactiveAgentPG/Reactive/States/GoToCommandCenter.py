@@ -37,27 +37,31 @@ class GoToCommandCenter(State):
             dir_prim = AgentConsts.MOVE_UP if diff_y > 0 else AgentConsts.MOVE_DOWN
             dir_sec = AgentConsts.MOVE_RIGHT if diff_x > 0 else AgentConsts.MOVE_LEFT
         
-        obstaculos_destruibles = [AgentConsts.BRICK, AgentConsts.SEMI_BREKABLE]
-        obstaculos_duros = [AgentConsts.UNBREAKABLE, AgentConsts.OTHER]
+        obstaculos_destruibles = [AgentConsts.BRICK]
+        obstaculos_duros = [AgentConsts.UNBREAKABLE]
 
-        casilla_prim = self.obtener_casilla(dir_prim, perception)
-        casilla_sec = self.obtener_casilla(dir_sec, perception)
-
-        vert = [AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
-        horz = [AgentConsts.MOVE_DOWN, AgentConsts.MOVE_UP]
-
-        if casilla_prim == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1 and (diff_x > 2 and diff_y > 2):
-            return dir_prim, 0
-        elif casilla_sec == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1 and (diff_x > 2 and diff_y > 2):
-            return dir_sec, 0
-        elif casilla_prim in obstaculos_destruibles and self.obtener_distancia(dir_prim, perception) < 1:
-            return dir_prim, (perception[AgentConsts.CAN_FIRE] > 0)
-        elif casilla_prim not in obstaculos_duros:
+        if self.obtener_casilla(dir_prim, perception) == AgentConsts.COMMAND_CENTER or diff_x < 1 and diff_y < 1:
+            return dir_prim, True
+        if self.obtener_casilla(dir_sec, perception) == AgentConsts.COMMAND_CENTER:
+            return dir_sec, True
+        
+        if self.obtener_casilla(dir_prim, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_prim, perception) > 1 and (diff_x > 1 and diff_y > 1):
             return dir_prim, False
-        elif casilla_sec in obstaculos_destruibles and self.obtener_distancia(dir_sec, perception) < 1:
-            return dir_sec, (perception[AgentConsts.CAN_FIRE] > 0)
-        elif casilla_sec not in obstaculos_duros:
+        if self.obtener_casilla(dir_sec, perception) == AgentConsts.NOTHING or self.obtener_distancia(dir_sec, perception) > 1 and (diff_x > 1 and diff_y > 1):
             return dir_sec, False
+        
+        for direccion in [dir_prim, dir_sec]:
+            casilla = self.obtener_casilla(direccion, perception)
+            dist = self.obtener_distancia(direccion, perception)
+
+            if casilla in obstaculos_destruibles and dist < 0.2:
+                if can_fire:
+                    return direccion, True
+                else:
+                    return direccion, False
+                    
+            elif casilla not in obstaculos_duros:
+                return direccion, False
 
         movimientos = [AgentConsts.MOVE_UP, AgentConsts.MOVE_DOWN, AgentConsts.MOVE_LEFT, AgentConsts.MOVE_RIGHT]
         random.shuffle(movimientos) 
