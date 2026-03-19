@@ -14,8 +14,7 @@ class Node:
         pass
 
     def __eq__(self, other):
-        raise NotImplementedError("__eq__ debe ser reimplementado en la clase hija")
-        pass
+        return self == other
 
     def __hash__(self):
         pass

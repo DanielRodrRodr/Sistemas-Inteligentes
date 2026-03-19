@@ -47,7 +47,7 @@ class BCProblem(Problem):
     #parámetro
     @staticmethod
     def CanMove(value):
-        return value != AgentConsts.UNBREAKABLE and value != AgentConsts.SEMI_UNBREKABLE and value != AgentConsts.SEMI_UNBREKABLE
+        return value != AgentConsts.UNBREAKABLE and value != AgentConsts.SEMI_UNBREKABLE
     
     #convierte coordenadas mapa en formato vector a matriz
     @staticmethod
@@ -92,7 +92,7 @@ class BCProblem(Problem):
     #crea un nodo y lo añade a successors (lista) con el padre indicado y la posición x,y en coordenadas mapa 
     @staticmethod
     def GetCost(value):
-        #TODO: debes darle un coste a cada tipo de casilla del mapa.
+        #TODO: dado un valor nos devuelve su coste
         print("Aqui falta ncosas por hacer :) ")
         return sys.maxsize
     

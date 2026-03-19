@@ -22,8 +22,7 @@ class Problem:
 
     #Calcula el coste de ir del nodo from al nodo to (Se necesita reimplementar)
     def GetGCostBetween(self, nodeFrom, nodeTo):
-        raise NotImplementedError("GetGCost no implementado")
-        return 0.0
+        return nodeFrom - nodeTo
     
     def SetGoal(self, goal):
         self.goal = goal
