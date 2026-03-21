@@ -11,10 +11,12 @@ class Node:
     
     #comprueba que dos nodos son iguales (se necesita reimplementar)
     def __repr__(self):
-        pass
+        return f"BCNode(g={self.g}, h={self.h})"
+        #pass
 
     def __eq__(self, other):
-        return self == other
+        raise NotImplementedError("__eq__ debe ser reimplementado en la clase hija")
+        pass
 
     def __hash__(self):
         pass

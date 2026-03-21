@@ -1,6 +1,4 @@
 
-from Deliverative.AStar.Node import Node
-from Deliverative.AStar.Problem import Problem
 #Algoritmo A* genérico que resuelve cualquier problema descrito usando la plantilla de la
 #la calse Problem que tenga como nodos hijos de la clase Node
 class AStar:
@@ -14,32 +12,25 @@ class AStar:
         findGoal = False
         #TODO implementar el algoritmo A*
         #cosas a tener en cuenta:
-        path = []
-
-        if self.open.count() == 0:
-            return path
-        
-        found = self.GetSucesorInOpen(self, self.open[1])
-        if found != None:
-            coste = Problem.GetGCostBetween(self, self.open[0], found)
-            if 0 < coste:
-                Node.SetParent(found, self.open[0])
-                Node.SetG(found)
-
+        #Si el número de sucesores es 0 es que el algoritmo no ha encontrado una solución, devolvemos el path vacio []
+        #Hay que invertir el path para darlo en el orden correcto al devolverlo (path[::-1])
+        #GetSucesorInOpen(sucesor) nos devolverá None si no lo encuentra, si lo encuentra
+        #es que ese sucesor ya está en la frontera de exploración, DEBEMOS MIRAR SI EL NUEVO COSTE ES MENOR QUE EL QUE TENIA ALMACENADO
+        #SI esto es asi, hay que cambiarle el padre y setearle el nuevo coste.
         self.open.clear()
         self.precessed.clear()
         self.open.append(self.problem.Initial())
-
-        while self.open.count() > 0 #and !meta
+        path = []
         #mientras no encontremos la meta y haya elementos en open....
         #TODO implementar el bucle de búsqueda del algoritmo A*
-        return path[::-1]
+        return path
 
     #nos permite configurar un nodo (node) con el padre y la nueva G
     def _ConfigureNode(self, node, parent, newG):
         node.SetParent(parent)
         node.SetG(newG)
         #TODO Setearle la heuristica que está implementada en el problema. (si ya la tenía será la misma pero por si reutilizais este método para otras cosas)
+        node.SetH(self.problem.Heuristic(node))
 
 
     def ApendInOpen(self, node):
@@ -63,6 +54,10 @@ class AStar:
     def ReconstructPath(self, goal):
         path = []
         #TODO: devuelve el path invertido desde la meta hasta que el padre sea None.
+        while goal is not None:
+            path.append(goal)
+            goal = goal.GetParent()
+
         return path
 
 

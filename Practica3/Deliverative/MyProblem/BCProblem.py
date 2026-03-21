@@ -32,14 +32,27 @@ class BCProblem(Problem):
     #Calcula la heuristica del nodo en base al problema planteado (Se necesita reimplementar)
     def Heuristic(self, node):
         #TODO: heurística del nodo
-        print("Aqui falta ncosas por hacer :) ")
-        return 0
+        #print("Aqui falta ncosas por hacer :) ")
+        #return 0
+        return abs(node.x - self.goal.x) + abs(node.y - self.goal.y)
 
     #Genera la lista de sucesores del nodo (Se necesita reimplementar)
     def GetSucessors(self, node):
         successors = []
         #TODO: sucesores de un nodo dado
-        print("Aqui falta ncosas por hacer :) ")
+        #print("Aqui falta ncosas por hacer :) ")
+        #return successors
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        for dx, dy in directions:
+            nx = node.x + dx
+            ny = node.y + dy
+
+            if 0 <= nx < self.xSize and 0 <= ny < self.ySize:
+                value = self.map[nx][ny]
+                if BCProblem.CanMove(value):
+                    self.CreateNode(successors, node, nx, ny)
+
         return successors
     
     #métodos estáticos
@@ -92,9 +105,21 @@ class BCProblem(Problem):
     #crea un nodo y lo añade a successors (lista) con el padre indicado y la posición x,y en coordenadas mapa 
     @staticmethod
     def GetCost(value):
-        #TODO: dado un valor nos devuelve su coste
-        print("Aqui falta ncosas por hacer :) ")
-        return sys.maxsize
+        #TODO: debes darle un coste a cada tipo de casilla del mapa.
+        #print("Aqui falta ncosas por hacer :) ")
+        #return sys.maxsize
+        if value == AgentConsts.NOTHING:
+            return 1
+        elif value == AgentConsts.COMMAND_CENTER:
+            return 1
+        elif value == AgentConsts.SEMI_BREKABLE:
+            return 2
+        elif value == AgentConsts.BRICK:
+            return 3
+        elif value == AgentConsts.UNBREAKABLE:
+            return sys.maxsize
+        else:
+            return 1
     
     def CreateNode(self,successors,parent,x,y):
         value=self.map[x][y]

@@ -62,10 +62,14 @@ class GoalOrientedAgent(BaseAgent):
         if self.goalMonitor != None:
             #TODO creamos un plan, pasos:
             #-con gualMonito, seleccionamos la meta actual (Que será la mas propicia => definir la estrategia a seguir).
+            goal = self.goalMonitor.SelectGoal(perception, map, self)
             #-le damos el modo inicial _CreateInitialNode
+            initial = self._CreateInitialNode(perception)
             #-establecer la meta actual al problema para que A* sepa cual es.
+            self.problem.SetInitial(initial)
+            self.problem.SetGoal(goal)
             #-Calcular el plan usando A*
-            print("TODO aqui faltan cosas :)")
+            #print("TODO aqui faltan cosas :)")
         return self.aStar.GetPlan()
         
     @staticmethod
@@ -97,11 +101,18 @@ class GoalOrientedAgent(BaseAgent):
         #creamos el problema
         #TODO inicializamos:
         # - creamos el problema con BCProblem
+        initialNode = self._CreateInitialNode(perception)
+        goalNode = self._CreateDefaultGoal(perception)
+        self.problem = BCProblem(initialNode, goalNode, 15, 15)
         # - inicializamos el mapa problem.InitMap
+        self.problem.InitMap(map)
         # - inicializamos A*
+        self.aStar = AStar(self.problem)
         # - creamos un plan inicial
-        print("TODO aqui faltan cosas :)")
-        goal1CommanCenter = None
+        self.plan = self._CreatePlan(perception, map)
+        #print("TODO aqui faltan cosas :)")
+        #goal1CommanCenter = None
+        goal1CommanCenter = self._CreateDefaultGoal(perception)
         goal2Life = self._CreateLifeGoal(perception)
         goal3Player = self._CreatePlayerGoal(perception)
         exitGoal = self._CreateExitGoal(perception)
