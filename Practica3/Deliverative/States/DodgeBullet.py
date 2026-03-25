@@ -72,4 +72,4 @@ class DodgeBullet(State):
         if (AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision) and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
         
 
-        return "GoToCommandCenter"
+        return "ExecutePlan"

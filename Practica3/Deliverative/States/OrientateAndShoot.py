@@ -51,4 +51,4 @@ class OrientateAndShoot(State):
         if perception[AgentConsts.COMMAND_CENTER_X] < 1 or perception[AgentConsts.PLAYER_X] < 1:
             return "GoToExit"
 
-        return "GoToCommandCenter"
+        return "ExecutePlan"

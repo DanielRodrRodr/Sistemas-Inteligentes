@@ -1,5 +1,5 @@
-from Deliverative.AStar.Node import Node
-from Deliverative.AStar.Problem import Problem
+from Deliverative.MyProblem.BCNode import BCNode
+from Deliverative.MyProblem.BCProblem import BCProblem
 #Algoritmo A* genérico que resuelve cualquier problema descrito usando la plantilla de la
 #la calse Problem que tenga como nodos hijos de la clase Node
 
@@ -46,7 +46,7 @@ class AStar:
                         else:
                             self._ConfigureNode(suc, current_node, new_g)
                             self.ApendInOpen(suc)
-        return path
+        return path[::-1]
 
     #nos permite configurar un nodo (node) con el padre y la nueva G
     def _ConfigureNode(self, node, parent, newG):

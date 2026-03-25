@@ -6,19 +6,19 @@ from AStar.AStar import AStar
 from MyProblem.BCNode import BCNode
 from MyProblem.BCProblem import BCProblem
 from States.AgentConsts import AgentConsts
-from States.Attack import Attack
-from States.RandomMovement import RandomMovement
+from States.OrientateAndShoot import OrientateAndShoot
+from States.DodgeBullet import DodgeBullet
+from States.GoToExit import GoToExit
 
 class GoalOrientedAgent(BaseAgent):
-
-
 
     def __init__(self, id, name):
         super().__init__(id, name)
         dictionary = {
         "ExecutePlan" : ExecutePlan("ExecutePlan"),
-        "Attack" : Attack("Attack"),
-        "RandomMovement" : RandomMovement("RandomMovement")
+        "OrientateAndShoot" : OrientateAndShoot("OrientateAndShoot"),
+        "DodgeBullet" : DodgeBullet("DodgeBullet"),
+        "GoToExit" : GoToExit("GoToExit")
         }
         
         self.stateMachine = StateMachine("GoalOrientedBehavior",dictionary,"ExecutePlan")
