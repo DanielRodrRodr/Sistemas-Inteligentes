@@ -19,7 +19,7 @@ class StateMachine(State):
         if newState != self.curentState:
             self.states[self.curentState].End()
             self.curentState=newState
-        
+            self.states[self.curentState].Start(agent)
         return actions
     
 

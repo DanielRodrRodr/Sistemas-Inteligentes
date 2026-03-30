@@ -7,7 +7,7 @@ from Agent.BaseAgent import BaseAgent
 from Deliverative.GoalOrientedAgent import GoalOrientedAgent
 
 
-agent = GoalOrientedAgent("1","TheAgent")
+agent = GoalOrientedAgent("1","MyAgent")
 agentLoop(agent,True)
 
  

@@ -2,7 +2,6 @@ from Deliverative.MyProblem.BCNode import BCNode
 from Deliverative.MyProblem.BCProblem import BCProblem
 #Algoritmo A* genérico que resuelve cualquier problema descrito usando la plantilla de la
 #la calse Problem que tenga como nodos hijos de la clase Node
-
 class AStar:
 
     def __init__(self, problem):
@@ -14,14 +13,19 @@ class AStar:
         findGoal = False
         #TODO implementar el algoritmo A*
         #cosas a tener en cuenta:
-        #¿?Hay que invertir el path para darlo en el orden correcto al devolverlo (path[::-1])
+        #Si el número de sucesores es 0 es que el algoritmo no ha encontrado una solución, devolvemos el path vacio []
+        #Hay que invertir el path para darlo en el orden correcto al devolverlo (path[::-1])
+        #GetSucesorInOpen(sucesor) nos devolverá None si no lo encuentra, si lo encuentra
+        #es que ese sucesor ya está en la frontera de exploración, DEBEMOS MIRAR SI EL NUEVO COSTE ES MENOR QUE EL QUE TENIA ALMACENADO
+        #SI esto es asi, hay que cambiarle el padre y setearle el nuevo coste.
         self.open.clear()
         self.precessed.clear()
         initial_node = self.problem.Initial()
         self._ConfigureNode(initial_node, None, 0)
-        self.open.append(self.problem.Initial())
+        self.open.append(initial_node)
         path = []
-        
+        #mientras no encontremos la meta y haya elementos en open....
+        #TODO implementar el bucle de búsqueda del algoritmo A*
         while len(self.open) > 0 and not findGoal:
             
             current_node = min(self.open, key=lambda n: n.G() + n.H())
@@ -36,7 +40,7 @@ class AStar:
                 successors = self.problem.GetSucessors(current_node)
                 for suc in successors:
                     if suc not in self.precessed:
-                        new_g = current_node.G() + 1 
+                        new_g = current_node.G() + self.problem.GetGCost(suc) 
                         
                         node_in_open = self.GetSucesorInOpen(suc)
 

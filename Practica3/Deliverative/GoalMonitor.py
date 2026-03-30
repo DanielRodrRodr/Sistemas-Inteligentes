@@ -19,6 +19,7 @@ class GoalMonitor:
 
     def NeedReplaning(self, perception, map, agent):
         if self.recalculate:
+            self.recalculate = False
             self.lastTime = perception[AgentConsts.TIME]
             return True
         #TODO definir la estrategia de cuando queremos recalcular
@@ -42,14 +43,17 @@ class GoalMonitor:
         #TODO definir la estrategia del cambio de meta
         #print("TODO aqui faltan cosas :)")
         #return self.goals[random.randint(0,len(self.goals))]
-        # Si tiene poca vida, ir a vida
-        if perception[AgentConsts.HEALTH] <= 1:
+        # Si tiene poca vida, ir a vida. También se comprueba que haya vida
+        if perception[AgentConsts.HEALTH] <= 1 and perception[AgentConsts.LIFE_X] != -1: 
             return self.goals[self.GOAL_LIFE]
         # Si hay jugador, atacarlo
-        if perception[AgentConsts.PLAYER_X] != -1:
+        if perception[AgentConsts.PLAYER_X] is not -1:
             return self.goals[self.GOAL_PLAYER]
+        # Si no hay base, salir
+        if perception[AgentConsts.COMMAND_CENTER_X] < 0:
+            return self.finalGoal
         # Ir a la base
-        return self.finalGoal
+        return self.goals[self.GOAL_COMMAND_CENTRER]
     
     def UpdateGoals(self,goal, goalId):
         self.goals[goalId] = goal
