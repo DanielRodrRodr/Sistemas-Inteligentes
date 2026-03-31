@@ -1,6 +1,7 @@
 from StateMachine.State import State
 from States.AgentConsts import AgentConsts
 from MyProblem.BCProblem import BCProblem
+import random
 
 class ExecutePlan(State):
 
@@ -33,12 +34,13 @@ class ExecutePlan(State):
             if self.noMovements > 5:
                 agent.goalMonitor.ForceToRecalculate()
                 plan.clear()
-                return AgentConsts.NO_MOVE, False
+                self.noMovements = 0
+                return random.randint(1,4), False
         else:
             self.noMovements = 0
             
         x, y = BCProblem.WorldToMapCoordFloat(xW, yW, agent.problem.ySize)
-        
+        y -= 0.1
         if len(plan) == 0: 
             agent.goalMonitor.ForceToRecalculate()
             return AgentConsts.NO_MOVE, False
