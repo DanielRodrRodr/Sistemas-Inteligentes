@@ -1,4 +1,3 @@
-import random
 from States.AgentConsts import AgentConsts
 
 class GoalMonitor:
