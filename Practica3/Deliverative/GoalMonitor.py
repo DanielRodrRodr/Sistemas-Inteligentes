@@ -28,7 +28,7 @@ class GoalMonitor:
         if self.lastTime == -1: #La primera vez
             self.lastTime = currentTime
 
-        if currentTime - self.lastTime > 10:
+        if currentTime - self.lastTime > 5:
             self.lastTime = currentTime
             return True
         if perception[AgentConsts.HEALTH] <= 1:
@@ -45,11 +45,8 @@ class GoalMonitor:
         # Si tiene poca vida, ir a vida. También se comprueba que haya vida
         if perception[AgentConsts.HEALTH] <= 1 and perception[AgentConsts.LIFE_X] != -1: 
             return self.goals[self.GOAL_LIFE]
-        # Si hay jugador, atacarlo
-        if perception[AgentConsts.PLAYER_X] is not -1:
-            return self.goals[self.GOAL_PLAYER]
         # Si no hay base, salir
-        if perception[AgentConsts.COMMAND_CENTER_X] < 0:
+        if perception[AgentConsts.COMMAND_CENTER_X] < 0 or perception[AgentConsts.PLAYER_X] < 0 :
             return self.finalGoal
         # Ir a la base
         return self.goals[self.GOAL_COMMAND_CENTRER]

@@ -47,8 +47,5 @@ class OrientateAndShoot(State):
         
         if (AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision) and perception[AgentConsts.CAN_FIRE] > 0:
             return "OrientateAndShoot"
-        
-        if perception[AgentConsts.COMMAND_CENTER_X] < 1 or perception[AgentConsts.PLAYER_X] < 1:
-            return "GoToExit"
 
         return "ExecutePlan"
