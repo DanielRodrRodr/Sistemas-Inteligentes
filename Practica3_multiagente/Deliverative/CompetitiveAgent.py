@@ -3,7 +3,6 @@ from StateMachine.StateMachine import StateMachine
 from States.ExecutePlan import ExecutePlan
 from States.OrientateAndShoot import OrientateAndShoot
 from States.DodgeBullet import DodgeBullet
-from States.GoToExit import GoToExit
 from AStar.AStar import AStar
 from MyProblem.BCNode import BCNode
 from MyProblem.BCProblem import BCProblem
@@ -18,8 +17,7 @@ class CompetitiveAgent(BaseAgent):
         dictionary = {
             "ExecutePlan": ExecutePlan("ExecutePlan"),
             "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
-            "DodgeBullet": DodgeBullet("DodgeBullet"),
-            "GoToExit": GoToExit("GoToExit")
+            "DodgeBullet": DodgeBullet("DodgeBullet")
         }
 
         self.stateMachine = StateMachine("CompetitiveBehavior", dictionary, "ExecutePlan")

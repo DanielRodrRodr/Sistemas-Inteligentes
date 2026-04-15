@@ -8,7 +8,6 @@ from MyProblem.BCProblem import BCProblem
 from States.AgentConsts import AgentConsts
 from States.OrientateAndShoot import OrientateAndShoot
 from States.DodgeBullet import DodgeBullet
-from States.GoToExit import GoToExit
 
 class GoalOrientedAgent(BaseAgent):
 
@@ -17,8 +16,7 @@ class GoalOrientedAgent(BaseAgent):
         dictionary = {
         "ExecutePlan" : ExecutePlan("ExecutePlan"),
         "OrientateAndShoot" : OrientateAndShoot("OrientateAndShoot"),
-        "DodgeBullet" : DodgeBullet("DodgeBullet"),
-        "GoToExit" : GoToExit("GoToExit")
+        "DodgeBullet" : DodgeBullet("DodgeBullet")
         }
         
         self.stateMachine = StateMachine("GoalOrientedBehavior",dictionary,"ExecutePlan")
