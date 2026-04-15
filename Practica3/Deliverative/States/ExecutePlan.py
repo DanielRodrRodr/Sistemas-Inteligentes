@@ -31,7 +31,7 @@ class ExecutePlan(State):
         # SISTEMA ANTI-ATASCOS
         if distance < 0.1:
             self.noMovements += 1
-            if self.noMovements > 5:
+            if self.noMovements > 2:
                 agent.goalMonitor.ForceToRecalculate()
                 plan.clear()
                 self.noMovements = 0
@@ -83,7 +83,7 @@ class ExecutePlan(State):
             perception[AgentConsts.NEIGHBORHOOD_RIGHT] == AgentConsts.SHELL or
             perception[AgentConsts.NEIGHBORHOOD_LEFT] == AgentConsts.SHELL):
             return "DodgeBullet"
-
+        
         if (AgentConsts.PLAYER in vision or AgentConsts.COMMAND_CENTER in vision) and perception[AgentConsts.CAN_FIRE] > 0: return "OrientateAndShoot"
 
         if self.transition != None and self.transition != "":
