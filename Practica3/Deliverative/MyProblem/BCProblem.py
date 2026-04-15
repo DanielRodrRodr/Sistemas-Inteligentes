@@ -111,7 +111,7 @@ class BCProblem(Problem):
         if value == AgentConsts.NOTHING:
             return 1
         elif value == AgentConsts.COMMAND_CENTER:
-            return 1
+            return 3
         elif value == AgentConsts.SEMI_BREKABLE:
             return 2
         elif value == AgentConsts.BRICK:

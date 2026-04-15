@@ -8,7 +8,6 @@ from MyProblem.BCProblem import BCProblem
 from States.AgentConsts import AgentConsts
 from States.OrientateAndShoot import OrientateAndShoot
 from States.DodgeBullet import DodgeBullet
-from States.GoToExit import GoToExit
 
 class GoalOrientedAgent(BaseAgent):
 
@@ -17,8 +16,7 @@ class GoalOrientedAgent(BaseAgent):
         dictionary = {
         "ExecutePlan" : ExecutePlan("ExecutePlan"),
         "OrientateAndShoot" : OrientateAndShoot("OrientateAndShoot"),
-        "DodgeBullet" : DodgeBullet("DodgeBullet"),
-        "GoToExit" : GoToExit("GoToExit")
+        "DodgeBullet" : DodgeBullet("DodgeBullet")
         }
         
         self.stateMachine = StateMachine("GoalOrientedBehavior",dictionary,"ExecutePlan")
@@ -52,7 +50,7 @@ class GoalOrientedAgent(BaseAgent):
         #Actualizamos el plan
         goal3Player = self._CreatePlayerGoal(perception)
         self.goalMonitor.UpdateGoals(goal3Player,2)
-        if self.goalMonitor.NeedReplaning(perception,map,self):
+        if self.goalMonitor.NeedReplaning(perception,map,self) or not perception[AgentConsts.CAN_FIRE]:
             self.problem.InitMap(map) ## refrescamos el mapa
             self.plan=self._CreatePlan(perception, map)
         return action, shot
