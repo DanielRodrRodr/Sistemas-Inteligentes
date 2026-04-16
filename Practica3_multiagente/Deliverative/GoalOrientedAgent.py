@@ -39,6 +39,7 @@ class GoalOrientedAgent(BaseAgent):
     #Metodo que se llama en cada actualización del agente, y se proporciona el vector de percepciones
     #Devuelve la acción o el disparo si o no
     def Update(self, perception, map):
+        
         if perception == True or perception == False:
             return 0,True
         if not self.agentInit:
@@ -48,8 +49,10 @@ class GoalOrientedAgent(BaseAgent):
         action, shot = self.stateMachine.Update(perception, map, self)
 
         #Actualizamos el plan
+        
         goal3Player = self._CreatePlayerGoal(perception)
         self.goalMonitor.UpdateGoals(goal3Player,2)
+            
         if self.goalMonitor.NeedReplaning(perception,map,self):
             self.problem.InitMap(map) ## refrescamos el mapa
             self.plan=self._CreatePlan(perception, map)
