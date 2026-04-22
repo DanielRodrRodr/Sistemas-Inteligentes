@@ -1,12 +1,13 @@
 from Agent.BaseAgent import BaseAgent
 from StateMachine.StateMachine import StateMachine
-from States.ExecutePlan import ExecutePlan
-from States.OrientateAndShoot import OrientateAndShoot
-from States.DodgeBullet import DodgeBullet
+from CompetitiveStates.ExecutePlan import ExecutePlan
+from CompetitiveStates.OrientateAndShoot import OrientateAndShoot
+from CompetitiveStates.DodgeBullet import DodgeBullet
+from CompetitiveStates.ChasePlayer import ChasePlayer
 from AStar.AStar import AStar
 from MyProblem.BCNode import BCNode
 from MyProblem.BCProblem import BCProblem
-from States.AgentConsts import AgentConsts
+from CompetitiveStates.AgentConsts import AgentConsts
 from CompetitiveGoalMonitor import CompetitiveGoalMonitor
 from MiniMax import MiniMax
 
@@ -17,7 +18,8 @@ class CompetitiveAgent(BaseAgent):
         dictionary = {
             "ExecutePlan": ExecutePlan("ExecutePlan"),
             "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
-            "DodgeBullet": DodgeBullet("DodgeBullet")
+            "DodgeBullet": DodgeBullet("DodgeBullet"),
+            "ChasePlayer": ChasePlayer("ChasePlayer")
         }
 
         self.stateMachine = StateMachine("CompetitiveBehavior", dictionary, "ExecutePlan")
@@ -65,7 +67,8 @@ class CompetitiveAgent(BaseAgent):
             self.plan = self._CreatePlan(perception, map)
 
         if perception[AgentConsts.PLAYER_X] != -1:
-            if perception[AgentConsts.AGENT_X] == perception[AgentConsts.PLAYER_X] or perception[AgentConsts.AGENT_Y] == perception[AgentConsts.PLAYER_Y]:
+            if self.minimax.HasLineOfSight(perception[AgentConsts.AGENT_X], perception[AgentConsts.AGENT_Y],
+                                           perception[AgentConsts.PLAYER_X], perception[AgentConsts.PLAYER_Y], map):
                 shot = True
 
         return action, shot

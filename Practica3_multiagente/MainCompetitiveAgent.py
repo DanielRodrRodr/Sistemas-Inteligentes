@@ -1,10 +1,10 @@
 import sys
 sys.path.insert(0,"./LGym")
 sys.path.insert(0,"./Agent")
-sys.path.insert(0,"./Deliverative")
+sys.path.insert(0,"./Competitive")
 from LGym.LGymClient import agentLoop
 from Agent.BaseAgent import BaseAgent
-from Deliverative.CompetitiveAgent import CompetitiveAgent
+from Competitive.CompetitiveAgent import CompetitiveAgent
 
 
 agent = CompetitiveAgent("1","CompetitiveAgent")

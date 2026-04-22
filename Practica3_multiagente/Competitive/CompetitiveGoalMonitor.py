@@ -1,5 +1,5 @@
-from States.AgentConsts import AgentConsts
-from GoalMonitor import GoalMonitor
+from CompetitiveStates.AgentConsts import AgentConsts
+from Deliverative.GoalMonitor import GoalMonitor
 
 class CompetitiveGoalMonitor(GoalMonitor):
 

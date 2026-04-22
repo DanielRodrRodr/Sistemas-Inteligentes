@@ -2,7 +2,7 @@
 #sys.path.insert(1, '../AStar')
 from AStar.Problem import Problem
 from MyProblem.BCNode import BCNode
-from Deliverative.States.AgentConsts import AgentConsts
+from CompetitiveStates.AgentConsts import AgentConsts
 import sys
 import numpy as np
 

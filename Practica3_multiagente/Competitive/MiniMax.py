@@ -1,6 +1,6 @@
 import math
 import random
-from States.AgentConsts import AgentConsts
+from Deliverative.States.AgentConsts import AgentConsts
 
 
 class MiniMax:
