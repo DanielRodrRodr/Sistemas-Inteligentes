@@ -30,11 +30,28 @@ class ChasePlayer(State):
         dx = px - ax
         dy = py - ay
 
-        if abs(dx) > abs(dy):
+        if abs(dx) >= abs(dy):
             if dx > 0 and self.is_free(AgentConsts.MOVE_RIGHT, perception):
                 return AgentConsts.MOVE_RIGHT, False
             if dx < 0 and self.is_free(AgentConsts.MOVE_LEFT, perception):
                 return AgentConsts.MOVE_LEFT, False
+            # Si el eje X está bloqueado, intentar eje Y
+            if dy > 0 and self.is_free(AgentConsts.MOVE_DOWN, perception):
+                return AgentConsts.MOVE_DOWN, False
+            if dy < 0 and self.is_free(AgentConsts.MOVE_UP, perception):
+                return AgentConsts.MOVE_UP, False
+        else:
+            if dy > 0 and self.is_free(AgentConsts.MOVE_DOWN, perception):
+                return AgentConsts.MOVE_DOWN, False
+            if dy < 0 and self.is_free(AgentConsts.MOVE_UP, perception):
+                return AgentConsts.MOVE_UP, False
+            # Si el eje Y está bloqueado, intentar eje X
+            if dx > 0 and self.is_free(AgentConsts.MOVE_RIGHT, perception):
+                return AgentConsts.MOVE_RIGHT, False
+            if dx < 0 and self.is_free(AgentConsts.MOVE_LEFT, perception):
+                return AgentConsts.MOVE_LEFT, False
+ 
+        return AgentConsts.NO_MOVE, False
 
     def Transit(self, perception, map):
 
