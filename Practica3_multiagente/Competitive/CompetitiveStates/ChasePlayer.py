@@ -64,10 +64,20 @@ class ChasePlayer(State):
             perception[AgentConsts.NEIGHBORHOOD_RIGHT] == AgentConsts.SHELL):
             return "DodgeBullet"
 
+        if perception[AgentConsts.HEALTH] <= 1 and perception[AgentConsts.LIFE_X] != -1:
+            return "Retreat"
+ 
+        px = perception[AgentConsts.PLAYER_X]
+        if px != -1:
+            dist = abs(perception[AgentConsts.AGENT_X] - px) + abs(perception[AgentConsts.AGENT_Y] - perception[AgentConsts.PLAYER_Y])
+            
         if (AgentConsts.PLAYER in vision) and perception[AgentConsts.CAN_FIRE] > 0:
             return "OrientateAndShoot"
 
-        if perception[AgentConsts.PLAYER_X] != -1:
+        if 6 <= dist <= 10:
+                return "Ambush"
+ 
+        if px != -1:
             return "ChasePlayer"
 
         return "ExecutePlan"

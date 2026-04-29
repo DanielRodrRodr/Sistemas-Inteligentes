@@ -4,6 +4,8 @@ from CompetitiveStates.ExecutePlan import ExecutePlan
 from CompetitiveStates.OrientateAndShoot import OrientateAndShoot
 from CompetitiveStates.DodgeBullet import DodgeBullet
 from CompetitiveStates.ChasePlayer import ChasePlayer
+from CompetitiveStates.Ambush import Ambush
+from CompetitiveStates.Retreat import Retreat
 from AStar.AStar import AStar
 from MyProblem.BCNode import BCNode
 from MyProblem.BCProblem import BCProblem
@@ -19,7 +21,9 @@ class CompetitiveAgent(BaseAgent):
             "ExecutePlan": ExecutePlan("ExecutePlan"),
             "OrientateAndShoot": OrientateAndShoot("OrientateAndShoot"),
             "DodgeBullet": DodgeBullet("DodgeBullet"),
-            "ChasePlayer": ChasePlayer("ChasePlayer")
+            "ChasePlayer": ChasePlayer("ChasePlayer"),
+            "Ambush": Ambush("Ambush"),
+            "Retreat": Retreat("Retreat")
         }
 
         self.stateMachine = StateMachine("CompetitiveBehavior", dictionary, "ExecutePlan")
