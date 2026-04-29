@@ -1,5 +1,5 @@
-from Deliverative.MyProblem.BCNode import BCNode
-from Deliverative.MyProblem.BCProblem import BCProblem
+from Competitive.MyProblem.BCNode import BCNode
+from Competitive.MyProblem.BCProblem import BCProblem
 #Algoritmo A* genérico que resuelve cualquier problema descrito usando la plantilla de la
 #la calse Problem que tenga como nodos hijos de la clase Node
 class AStar:
