@@ -1,6 +1,7 @@
 from CompetitiveStates.AgentConsts import AgentConsts
+from Competitive.GoalMonitor import GoalMonitor
 
-class CompetitiveGoalMonitor:
+class CompetitiveGoalMonitor(GoalMonitor):
 
     def __init__(self, problem, goals, finalGoal):
         super().__init__(problem, goals, finalGoal)

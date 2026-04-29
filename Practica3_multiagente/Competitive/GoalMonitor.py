@@ -1,4 +1,4 @@
-from States.AgentConsts import AgentConsts
+from CompetitiveStates.AgentConsts import AgentConsts
 
 class GoalMonitor:
 
