@@ -29,7 +29,16 @@ class ChasePlayer(State):
         # Mover hacia el jugador
         dx = px - ax
         dy = py - ay
+        dist = abs(dx) + abs(dy)
 
+        # Si ya son adyacentes, orientarse y disparar sin avanzar encima
+        if dist <= 1:
+            if abs(dx) >= abs(dy):
+                face = AgentConsts.MOVE_RIGHT if dx > 0 else AgentConsts.MOVE_LEFT
+            else:
+                face = AgentConsts.MOVE_DOWN if dy > 0 else AgentConsts.MOVE_UP
+            return face, perception[AgentConsts.CAN_FIRE] > 0
+        
         if abs(dx) >= abs(dy):
             if dx > 0 and self.is_free(AgentConsts.MOVE_RIGHT, perception):
                 return AgentConsts.MOVE_RIGHT, False

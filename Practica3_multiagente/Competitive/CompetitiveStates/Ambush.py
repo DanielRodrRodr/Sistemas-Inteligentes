@@ -42,17 +42,17 @@ class Ambush(State):
 
     def _find_flanking_cell(self, ax, ay, px, py, map_data):
         #Busca una celda adyacente al enemigo desde la que se tiene visión sobre él pero que no esté en línea recta directa con nuestra posición actual
-
-        size = int(len(map_data) ** 0.5)
         candidates = []
  
-        # Celdas en un radio de 2 alrededor del jugador
-        for dx in range(-2, 3):
-            for dy in range(-2, 3):
+        # Celdas en un radio de 3 alrededor del jugador
+        for dx in range(-3, 4):
+            for dy in range(-3, 4):
                 fx, fy = px + dx, py + dy
                 if not self._is_walkable(fx, fy, map_data):
                     continue
                 if fx == px and fy == py:
+                    continue
+                if abs(fx - px) + abs(fy - py) < 1:
                     continue
                 # Debe tener línea de visión al enemigo
                 if not self._has_line_of_sight(fx, fy, px, py, map_data):
@@ -126,17 +126,32 @@ class Ambush(State):
             return (random.choice(free) if free else AgentConsts.NO_MOVE), False
  
         # Recalcular objetivo flanqueante cada 7 pasos o si no se tiene localizado
+        # Ai no hay flanqueo posible, quedarse a distancia 2 en línea recta
         if self._ambush_target is None or self._steps_in_ambush % 7 == 0:
             result = self._find_flanking_cell(ax, ay, px, py, map)
-            self._ambush_target = result if result else (px, py)
+
+            if result:
+                self._ambush_target = result
+            else:
+                dx = px - ax
+                dy = py - ay
+                if abs(dx) >= abs(dy):
+                    self._ambush_target = (px - (1 if dx > 0 else -1), py)
+                else:
+                    self._ambush_target = (px, py - (1 if dy > 0 else -1))
  
         tx, ty = self._ambush_target
  
-        # Si está en la celda flanqueante, disparar
+        # Si está en la celda flanqueante: orientarse y disparar
         if abs(ax - tx) <= 1 and abs(ay - ty) <= 1:
             if self._has_line_of_sight(ax, ay, px, py, map):
-                move = self._move_towards(ax, ay, px, py, perception)
-                return move, perception[AgentConsts.CAN_FIRE] > 0
+                dx = px - ax
+                dy = py - ay
+                if abs(dx) >= abs(dy):
+                    face = AgentConsts.MOVE_RIGHT if dx > 0 else AgentConsts.MOVE_LEFT
+                else:
+                    face = AgentConsts.MOVE_DOWN if dy > 0 else AgentConsts.MOVE_UP
+                return face, perception[AgentConsts.CAN_FIRE] > 0
  
         return self._move_towards(ax, ay, tx, ty, perception), False
 
@@ -155,8 +170,7 @@ class Ambush(State):
  
         px = perception[AgentConsts.PLAYER_X]
         if px != -1:
-            dist = abs(perception[AgentConsts.AGENT_X] - px) + \
-                   abs(perception[AgentConsts.AGENT_Y] - perception[AgentConsts.PLAYER_Y])
+            dist = abs(perception[AgentConsts.AGENT_X] - px) + abs(perception[AgentConsts.AGENT_Y] - perception[AgentConsts.PLAYER_Y])
  
             if AgentConsts.PLAYER in vision and perception[AgentConsts.CAN_FIRE] > 0:
                 return "OrientateAndShoot"

@@ -61,7 +61,6 @@ class MiniMax:
 
     def Simulate(self, perception, map, action, isMax):
         newPerception = perception.copy()
-        size = int(len(map) ** 0.5)
 
         if isMax:
             x = newPerception[AgentConsts.AGENT_X]
@@ -104,9 +103,13 @@ class MiniMax:
         dist = abs(agentX - playerX) + abs(agentY - playerY)
         score = 0
 
-        # Ganar
+        # Penalizar estar en la misma casilla
         if dist == 0:
-            return 10000
+            return -500
+
+        # Distancia de 1 o 2 casillas para disparar
+        if dist == 1 and self.HasLineOfSight(agentX, agentY, playerX, playerY, map):
+            return 900
 
         # Acercarse
         score += -dist * 15
@@ -129,8 +132,6 @@ class MiniMax:
         return score
 
     def HasLineOfSight(self, x1, y1, x2, y2, map):
-        size = int(len(map) ** 0.5)
-
         # misma columna
         if x1 == x2:
             step = 1 if y2 > y1 else -1
